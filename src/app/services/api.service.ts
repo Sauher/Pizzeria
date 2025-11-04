@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
 import { apires } from '../interfaces/response';
+import { enviroment } from '../../enviroment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class APIService {
-  SERVER = 'http://localhost:3000'
+  SERVER = enviroment.ServerURL 
   constructor() { }
 
   // Get all records from table
@@ -113,6 +114,23 @@ export class APIService {
     return {
       status:200,
       message: "A regisztráció sikeres",
+      data : res.data
+    }
+    }
+    catch (err : any){
+      return {
+        status:500,
+        message: err.response.data.error
+        
+      }
+    }
+  }
+  async Login(table: string, data: any){
+    try{
+      const res = await axios.post(`${this.SERVER}/${table}/login` , data)
+    return {
+      status:200,
+      message: "Sikeres belépés",
       data : res.data
     }
     }
